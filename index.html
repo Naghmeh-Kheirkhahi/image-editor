@@ -1,0 +1,298 @@
+<html>
+    <head>
+        <script src="https://kit.fontawesome.com/6700fb65a7.js" crossorigin="anonymous"></script>
+        <title>Easy Image Editor</title>
+    </head>
+
+    <body>
+        <div class="main-class col-10 display-flex align-item-center text-align margin-auto">
+        
+            <div class="title-class">
+                <p>Easy Image Editor</p>
+            </div>
+
+            <div class="col-12 display-flex space-between">
+                <div class="col-6">
+                    <div class="setting-image-class">
+                        <div style="margin-bottom: 10%;">
+                            <p>Filters</p>
+                            <div class="col-12 display-flex space-between filters-class">
+                                <button class="col-5" onclick="brightnessFunction()">Brightness</button>
+                                <button class="col-5" style="margin-right: 10%;" onclick="saturationFunction()">Saturation</button>
+                            </div>
+    
+                            <div class="col-12 display-flex space-between filters-class">
+                                <button class="col-5" onclick="inversionFunction()">Inversion</button>
+                                <button class="col-5" style="margin-right: 10%;" onclick="grayscaleFunction()">Grayscale</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <p id="filterName">Brightness</p>
+                            </div>
+    
+                            <div style="margin-bottom: 10%;">
+                                <p style="margin: 1% 0 1% 80%;" id="percent">100%</p>
+                                <input type="range" value="100" min="0" max="200" id="rangeInput" style="width: 465px;" onvolumechange="rangeFilter()"> <!-- its name is range slider -->
+                            </div>
+                        </div>
+
+                        <div>
+                            <p>Rotate & Flip</p>
+                            <div class="col-12 display-flex space-between rotate-flip-class ">
+                                <button onclick="rotateLeft()"><i class="fa-solid fa-rotate-left"></i></button>
+                                <button onclick="rotateRight()"><i class="fa-sharp fa-solid fa-rotate-right"></i></button>
+                                <button onclick="flipHerizontal()"><i class="fa-solid fa-arrows-left-right"></i></button>
+                                <button onclick="flipVertical()" style="padding: 15px 19px 15px 19px; margin-right: 12%;"><i class="fa-solid fa-arrows-up-down"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reset-class">
+                        <button onclick="resetFilters()">Reset Filters</button>
+                    </div>
+                </div>
+    
+                <div class="col-5 image-class">
+                    <div class="display-image" id="displayImgDiv">
+                        <img id="displayImage" style="display: none;">
+                    </div>
+
+                    <input type="file" accept="image/*" id="myInput" hidden onchange="loadImage()"> <!-- display: none ....> the element loses its appearance and ability but hidden it only loses its appearance-->
+
+                    <div class="image-button-class" id="imgBtnDiv">
+                        <button id="chooseImage" onclick="uploadImage()">Choose Image</button>
+                        <button id="saveImage" onclick="downloadImage()">Save Image</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+
+    <style>
+
+        * {
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: rgb(133, 163, 201);
+        }
+    
+        .text-center {
+            text-align: center;
+        }
+    
+        .display-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .align-item-center {
+            align-items: center;
+        }
+    
+        .space-between {
+            justify-content: space-between;
+        }
+    
+        .space-around {
+            justify-content: space-around;
+        }
+    
+        .flex-column {
+            flex-direction: column;
+        }
+    
+        .margin-auto {
+            margin: auto;
+        }
+
+        .main-class {
+            border: 2px solid rgb(117, 144, 178);
+            border-radius: 8px;
+            background-color: rgb(255, 255, 255);
+            margin: 10%;
+            padding: 25px;
+            box-shadow: 12px 12px 10px rgb(105, 118, 135);
+        }
+
+        .title-class {
+            font-size: 35px; 
+            font-weight: bold;
+            color: rgb(0, 0, 0);
+            margin: 2% 0 2% 4%;
+            text-shadow: 4px 4px 5px rgb(115, 115, 115);
+        }
+
+        .image-class {
+            margin-right: 4%;
+        }
+
+        .display-image {
+            border: 1px solid rgb(117, 144, 178);
+            border-radius: 5px;
+            background-color: rgb(117, 144, 178);
+            height: 468px;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .display-image img{
+            width: 468px;
+            height: 468px;
+        }
+
+        .image-button-class{
+            margin: 4% 0 4% 48%;
+        }
+
+        .image-button-class button{
+            border: 1px solid rgb(97, 97, 97);
+            background-color: rgb(97, 97, 97);
+            border-radius: 5px;
+            font-size: 18px;
+            color: white;
+            padding: 10px;
+        }
+
+        .image-button-class button:hover {
+            border: 1px solid rgb(17, 53, 171);
+            background-color: rgb(21, 65, 208);
+            cursor: pointer;
+        }
+
+        .setting-image-class {
+            border: 2px solid rgb(127, 127, 127);
+            border-radius: 5px;
+            background-color: rgb(255, 255, 255);
+            margin-left: 10%;
+            padding: 25px 0 25px 25px;
+        }
+
+        .setting-image-class p {
+            font-size: 22px;
+        }
+
+        .setting-image-class button {
+            font-size: 18px;
+        }
+
+        .reset-class {
+            margin: 4% 0 4% 10%;
+        }
+
+        .reset-class button {
+            border: 2px solid rgb(83, 83, 83);
+            background-color: white;
+            border-radius: 5px;
+            font-size: 18px;
+            color: rgb(37, 37, 37);
+            padding: 10px;
+        }
+
+        .reset-class button:hover {
+            border: 1px solid rgb(17, 53, 171);
+            background-color: rgb(21, 65, 208);
+            cursor: pointer;
+            color: white;
+        }
+
+        .filters-class {
+            margin: 10px 0 20px 0;
+        }
+
+        .filters-class button {
+            border: 1px solid rgb(83, 83, 83);
+            background-color: white;
+            border-radius: 5px;
+            color: rgb(37, 37, 37);
+            padding: 10px;
+        }
+
+        .filters-class button:hover {
+            border: 1px solid rgb(17, 53, 171);
+            background-color: rgb(21, 65, 208);
+            cursor: pointer;
+            color: white;
+        }
+
+        .rotate-flip-class {
+            margin-top: 4%;
+        }
+
+        .rotate-flip-class button {
+            border: 1px solid rgb(83, 83, 83);
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+
+        .rotate-flip-class button:hover {
+            border: 1px solid rgb(17, 53, 171);
+            background-color: rgb(21, 65, 208);
+            cursor: pointer;
+            color: white;
+        }
+
+        
+
+        .col-1 {
+            width: 8.33%;
+        }
+    
+        .col-2 {
+            width: 16.66%;
+        }
+    
+        .col-3 {
+            width: 25%;
+        }
+    
+        .col-4 {
+            width: 33.33%;
+        }
+    
+        .col-5 {
+            width: 41.66%;
+        }
+    
+        .col-6 {
+            width: 50%;
+        }
+    
+        .col-7 {
+            width: 58.33%;
+        }
+    
+        .col-8 {
+            width: 66.66%;
+        }
+    
+        .col-9 {
+            width: 75%;
+        }
+    
+        .col-10 {
+            width: 83.33%;
+        }
+    
+        .col-11 {
+            width: 91.66%;
+        }
+    
+        .col-12 {
+            width: 100%;
+        }
+    
+    </style>
+    <script src="script.js"></script>
+</html>
